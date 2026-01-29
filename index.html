@@ -1,65 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BetArgento — Laberinto del Tesoro</title>
-  
-  <!-- Changed fonts from Poppins to Cinzel, Inter, and Teko for BetArgento style -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BetArgento — El Templo de Mármol (Laberinto)</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Marble temple vibe: Cinzel + Inter + Teko -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600&family=Teko:wght@500;600&display=swap" rel="stylesheet">
-  
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+    /* =========================
+       THEME: EL TEMPLO DE MÁRMOL
+       ========================= */
+    :root{
+      --bg0:#06080c;
+      --bg1:#0b0f16;
+      --bg2:#0f1622;
+
+      --marble:#e9eef6;
+      --marble-2:#cfd7e6;
+      --marble-3:#9aa6bf;
+
+      --ink:#0a0f14;
+      --shadow: rgba(0,0,0,.55);
+
+      --gold:#d4af37;
+      --gold-2:#b8902f;
+      --gold-3:#f1d27a;
+
+      --torch:#ffb554;
+      --torch-2:#ff6a3d;
+
+      --accent:#9fd3ff;
+      --accent-2:#4bb9ff;
+
+      --ff-body:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      --ff-display:'Cinzel',serif;
+      --ff-ui:'Teko',sans-serif;
     }
 
-    html {
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    /* BetArgento color palette: blues + black + gold */
-    :root {
-      --blue: #27B5FF;
-      --blue-soft: #7CD6FF;
-      --blue-deep: #0C2233;
-      --blue-dark: #081621;
-      --ink: #0B0F14;
-      --gold: #D4AF37;
-      --gold-dark: #B4902F;
-      --gold-soft: #F1D27A;
-      --cream: #EAF6FF;
-      --white: #FFFFFF;
-      --ff-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      --ff-display: 'Cinzel', serif;
-      --ff-ui: 'Teko', sans-serif;
-    }
-
-    body {
+    body{
       font-family: var(--ff-body);
-      /* BetArgento gradient background */
-      background:
-        radial-gradient(1200px 700px at 50% -10%, rgba(39,181,255,.12), transparent 60%),
-        radial-gradient(900px 600px at 80% 100%, rgba(212,175,55,.08), transparent 60%),
-        linear-gradient(135deg, var(--ink) 0%, var(--blue-dark) 55%, var(--blue-deep) 100%);
       min-height: 100vh;
-      color: var(--cream);
       overflow-x: hidden;
-      position: relative;
-      letter-spacing: .1px;
-      line-height: 1.6;
+      color: rgba(233,238,246,.92);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
+      /* Marble temple ambience */
+      background:
+        radial-gradient(1000px 650px at 50% -10%, rgba(212,175,55,.10), transparent 60%),
+        radial-gradient(900px 700px at 10% 100%, rgba(79,140,255,.10), transparent 60%),
+        radial-gradient(700px 500px at 90% 70%, rgba(255,181,84,.08), transparent 60%),
+        linear-gradient(135deg, var(--bg0) 0%, var(--bg1) 55%, var(--bg2) 100%);
+      position: relative;
+      letter-spacing: .1px;
+      line-height: 1.6;
     }
 
-    /* Preloader */
-    #preloader {
+    /* Subtle floating dust */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      background:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.10) 0 40%, transparent 60%),
+        radial-gradient(2px 2px at 70% 20%, rgba(255,255,255,.08) 0 40%, transparent 60%),
+        radial-gradient(1.5px 1.5px at 35% 75%, rgba(255,255,255,.06) 0 40%, transparent 60%),
+        radial-gradient(1.5px 1.5px at 85% 65%, rgba(255,255,255,.06) 0 40%, transparent 60%);
+      opacity: .55;
+      filter: blur(.2px);
+      animation: dustFloat 10s linear infinite alternate;
+    }
+    @keyframes dustFloat{
+      from{ transform: translateY(0px); opacity:.40;}
+      to{ transform: translateY(-10px); opacity:.60;}
+    }
+
+    /* =========================
+       PRELOADER
+       ========================= */
+    #preloader{
       position: fixed;
       inset: 0;
       z-index: 9999;
@@ -67,545 +96,513 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--ink) 0%, var(--blue-dark) 100%);
+      background:
+        radial-gradient(900px 600px at 50% 10%, rgba(212,175,55,.12), transparent 60%),
+        linear-gradient(135deg, #070a10 0%, #0b101a 100%);
       transition: opacity .5s ease, visibility .5s ease;
     }
+    #preloader.hidden{ opacity: 0; visibility: hidden; }
 
-    #preloader.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    #logo {
+    #logo{
       width: 260px;
       max-width: 80vw;
       height: auto;
-      animation: logoFloat 2.5s ease-in-out infinite;
-      filter: drop-shadow(0 10px 30px rgba(39,181,255,.35));
+      animation: logoFloat 2.6s ease-in-out infinite;
+      filter: drop-shadow(0 18px 45px rgba(212,175,55,.20)) drop-shadow(0 10px 30px rgba(79,140,255,.12));
+    }
+    @keyframes logoFloat{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-14px); }
     }
 
-    @keyframes logoFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-14px); }
-    }
-
-    .loading-progress {
-      margin-top: 30px;
-      width: 320px;
-      max-width: 80vw;
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      height: 4px;
-      background: rgba(39,181,255,.20);
+    .loading-progress{ margin-top: 30px; width: 320px; max-width: 80vw; }
+    .progress-bar-container{
+      width:100%;
+      height:4px;
+      background: rgba(159,211,255,.18);
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,.35);
     }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--blue), var(--blue-soft), var(--gold));
-      background-size: 200% 100%;
-      width: 0%;
+    .progress-bar-fill{
+      height:100%;
+      width:0%;
       border-radius: 10px;
       transition: width .1s linear;
+      background: linear-gradient(90deg, var(--gold), var(--accent-2), var(--gold-3));
+      background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
-      box-shadow: 0 0 10px rgba(39,181,255,.45);
+      box-shadow: 0 0 14px rgba(212,175,55,.25);
     }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+    @keyframes shimmer{
+      0%{ background-position: 200% 0; }
+      100%{ background-position: -200% 0; }
     }
-
-    .progress-text {
+    .progress-text{
       margin-top: 10px;
       font-size: .85rem;
-      color: var(--blue-soft);
-      text-align: center;
+      color: rgba(159,211,255,.85);
+      text-align:center;
       letter-spacing: .5px;
     }
 
-    /* Game Container */
-    .container {
+    /* =========================
+       LAYOUT
+       ========================= */
+    .container{
       position: relative;
       z-index: 1;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      align-items:center;
+      justify-content:center;
       padding: 20px;
+      width: 100%;
+      max-width: 1020px;
     }
 
-    .header-section {
-      text-align: center;
-      margin-bottom: 40px;
+    .header-section{
+      text-align:center;
+      margin-bottom: 34px;
       animation: fadeInDown 1s ease;
-      max-width: 960px;
-      margin-left: auto;
-      margin-right: auto;
+      padding: 0 10px;
+    }
+    @keyframes fadeInDown{
+      from{ opacity:0; transform: translateY(-30px); }
+      to{ opacity:1; transform: translateY(0); }
     }
 
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .event-badge {
-      display: inline-block;
+    .event-badge{
+      display:inline-block;
       padding: 8px 18px;
       border-radius: 999px;
-      background: linear-gradient(135deg, var(--blue), var(--blue-soft));
+      background: linear-gradient(135deg, rgba(233,238,246,.16), rgba(212,175,55,.18));
+      border: 1px solid rgba(212,175,55,.35);
       font-family: var(--ff-ui);
-      font-size: clamp(.8rem, 2.2vw, .95rem);
+      font-size: clamp(.85rem, 2.2vw, 1rem);
       line-height: 1;
-      letter-spacing: .4px;
-      color: #072232;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 20px rgba(39,181,255,.25);
+      letter-spacing: .6px;
+      color: rgba(241,210,122,.95);
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
       text-transform: uppercase;
     }
 
-    h1 {
+    h1{
       font-family: var(--ff-display);
-      font-weight: 700;
-      line-height: 1.12;
-      font-size: clamp(2.2rem, 5vw, 3.6rem);
-      margin-bottom: 14px;
+      font-weight: 800;
+      line-height: 1.10;
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+      margin-bottom: 12px;
       letter-spacing: .2px;
-      background: linear-gradient(135deg, var(--blue-soft), var(--white));
+      background: linear-gradient(135deg, var(--marble), rgba(159,211,255,.95));
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 12px 30px rgba(0,0,0,.35));
     }
 
-    .subtitle {
-      max-width: 640px;
+    .subtitle{
+      max-width: 680px;
       margin: 0 auto;
-      color: rgba(234,246,255,.92);
+      color: rgba(233,238,246,.88);
       font-size: clamp(1rem, 2.2vw, 1.1rem);
     }
 
-    /* Canvas Container */
-    .game-wrapper {
+    .game-wrapper{
       animation: fadeInUp 1s ease .25s both;
-      margin-top: 12px;
+      margin-top: 10px;
       width: 100%;
       display: grid;
       place-items: center;
     }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInUp{
+      from{ opacity:0; transform: translateY(30px); }
+      to{ opacity:1; transform: translateY(0); }
     }
 
-    .canvas-container {
+    /* =========================
+       CANVAS PANEL (MARBLE FRAME)
+       ========================= */
+    .canvas-container{
       position: relative;
       display: inline-block;
-      background: linear-gradient(135deg, #0E2B40 0%, #091A27 100%);
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow:
-        0 22px 62px rgba(39,181,255,.30),
-        0 0 0 1px rgba(39,181,255,.25),
-        inset 0 1px 0 rgba(255,255,255,.08);
       max-width: 95vw;
+      border-radius: 26px;
+      padding: 18px;
+      background:
+        linear-gradient(180deg, rgba(233,238,246,.08), rgba(0,0,0,.10));
+      box-shadow:
+        0 26px 80px rgba(0,0,0,.55),
+        0 0 0 1px rgba(159,211,255,.14),
+        inset 0 1px 0 rgba(255,255,255,.06);
     }
 
-    #mazeCanvas {
-      display: block;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    /* Marble frame border */
+    .canvas-container::before{
+      content:"";
+      position:absolute;
+      inset: 8px;
+      border-radius: 20px;
+      background:
+        radial-gradient(800px 300px at 50% -20%, rgba(212,175,55,.18), transparent 60%),
+        linear-gradient(135deg, rgba(233,238,246,.26), rgba(160,170,200,.08));
+      box-shadow:
+        inset 0 0 0 1px rgba(212,175,55,.20),
+        inset 0 0 0 2px rgba(159,211,255,.10);
+      pointer-events:none;
+      mix-blend-mode: screen;
+      opacity: .9;
+    }
+
+    #mazeCanvas{
+      position: relative;
+      z-index: 1;
+      display:block;
+      border-radius: 14px;
+      box-shadow: 0 18px 42px rgba(0,0,0,.55);
       max-width: 100%;
       height: auto;
+      background: transparent;
     }
 
-    /* Mobile Controls */
-    .mobile-controls {
-      display: none;
+    /* Decorative corner torches */
+    .torch{
+      position:absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.7), rgba(255,181,84,.65) 25%, rgba(255,106,61,.35) 60%, transparent 70%);
+      filter: blur(.2px);
+      box-shadow: 0 0 28px rgba(255,181,84,.35), 0 0 60px rgba(255,106,61,.18);
+      animation: torchFlicker 1.4s ease-in-out infinite alternate;
+      pointer-events:none;
+      z-index: 2;
+    }
+    @keyframes torchFlicker{
+      from{ transform: scale(.92); opacity:.8; }
+      to{ transform: scale(1.12); opacity:1; }
+    }
+    .torch.t1{ top: 16px; left: 16px; }
+    .torch.t2{ top: 16px; right: 16px; }
+    .torch.t3{ bottom: 16px; left: 16px; }
+    .torch.t4{ bottom: 16px; right: 16px; }
+
+    /* =========================
+       MOBILE CONTROLS
+       ========================= */
+    .mobile-controls{
+      display:none;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      max-width: 300px;
-      margin: 20px auto;
+      max-width: 320px;
+      margin: 18px auto 0;
+      width: 100%;
+      padding: 0 8px;
     }
 
-    .control-btn {
-      background: linear-gradient(145deg, var(--blue), var(--blue-deep));
-      border: 3px solid var(--blue-soft);
-      border-radius: 15px;
-      padding: 20px;
+    .control-btn{
+      background:
+        linear-gradient(180deg, rgba(233,238,246,.14), rgba(0,0,0,.18));
+      border: 1.5px solid rgba(212,175,55,.35);
+      border-radius: 16px;
+      padding: 18px;
       font-size: 1.5rem;
-      color: var(--white);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(39,181,255,.4);
-      user-select: none;
+      color: rgba(233,238,246,.92);
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+      box-shadow: 0 12px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+      user-select:none;
       -webkit-tap-highlight-color: transparent;
     }
+    .control-btn:active{
+      transform: scale(.96);
+      box-shadow: 0 10px 22px rgba(0,0,0,.55);
+      background: linear-gradient(180deg, rgba(212,175,55,.14), rgba(0,0,0,.18));
+    }
+    .control-btn.up{ grid-column: 2; }
+    .control-btn.left{ grid-column: 1; }
+    .control-btn.down{ grid-column: 2; }
+    .control-btn.right{ grid-column: 3; }
 
-    .control-btn:active {
-      transform: scale(0.95);
-      box-shadow: 0 2px 10px rgba(39,181,255,.6);
+    /* =========================
+       INSTRUCTIONS
+       ========================= */
+    .instructions{
+      margin-top: 22px;
+      padding: 18px 20px;
+      background: rgba(233,238,246,.06);
+      border-radius: 16px;
+      border: 1px solid rgba(159,211,255,.18);
+      box-shadow: 0 12px 34px rgba(0,0,0,.35);
+      max-width: 650px;
+      width: 100%;
     }
 
-    .control-btn.up {
-      grid-column: 2;
-    }
-
-    .control-btn.left {
-      grid-column: 1;
-    }
-
-    .control-btn.down {
-      grid-column: 2;
-    }
-
-    .control-btn.right {
-      grid-column: 3;
-    }
-
-    /* Instructions */
-    .instructions {
-      margin-top: 25px;
-      padding: 20px;
-      background: rgba(39,181,255,.08);
-      border-radius: 15px;
-      border: 2px solid rgba(39,181,255,.25);
-      box-shadow: 0 5px 20px rgba(0,0,0,.3);
-      max-width: 600px;
-    }
-
-    .instructions h3 {
-      color: var(--gold);
-      font-size: 1.3rem;
+    .instructions h3{
+      color: rgba(241,210,122,.98);
+      font-size: 1.25rem;
       margin-bottom: 10px;
-      font-weight: 600;
+      font-weight: 700;
       font-family: var(--ff-display);
     }
 
-    .instructions p {
-      color: var(--cream);
+    .instructions p{
+      color: rgba(233,238,246,.88);
       font-size: 0.95rem;
       line-height: 1.6;
       margin-bottom: 8px;
     }
 
-    .keys {
-      display: flex;
-      justify-content: center;
+    .keys{
+      display:flex;
+      justify-content:center;
       gap: 10px;
-      margin-top: 15px;
+      margin-top: 14px;
       flex-wrap: wrap;
     }
-
-    .key {
-      background: linear-gradient(145deg, var(--blue), var(--blue-deep));
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 600;
+    .key{
+      background: rgba(0,0,0,.22);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
       font-size: 0.9rem;
-      box-shadow: 0 4px 15px rgba(39,181,255,.4);
-      border: 2px solid rgba(124,214,255,.5);
-      color: var(--white);
+      border: 1px solid rgba(212,175,55,.28);
+      color: rgba(233,238,246,.95);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
     }
 
-    /* Modal */
-    .result-modal {
+    /* =========================
+       MODAL
+       ========================= */
+    .result-modal{
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.85);
+      background: rgba(0,0,0,.82);
       backdrop-filter: blur(10px);
-      display: none;
-      align-items: center;
-      justify-content: center;
+      display:none;
+      align-items:center;
+      justify-content:center;
       z-index: 1000;
       padding: 20px;
       animation: fadeIn .3s ease;
     }
+    .result-modal.show{ display:flex; }
+    @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
 
-    .result-modal.show {
-      display: flex;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .modal-content {
-      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--ink) 100%);
+    .modal-content{
+      background:
+        radial-gradient(900px 300px at 50% -20%, rgba(212,175,55,.18), transparent 60%),
+        linear-gradient(135deg, rgba(233,238,246,.10) 0%, rgba(0,0,0,.20) 70%, rgba(0,0,0,.28) 100%);
       border-radius: 22px;
       padding: clamp(28px, 6vw, 46px);
-      max-width: 500px;
+      max-width: 520px;
       width: 100%;
-      text-align: center;
+      text-align:center;
       position: relative;
-      border: 1.5px solid var(--blue);
+      border: 1.5px solid rgba(212,175,55,.42);
       box-shadow:
-        0 30px 80px rgba(0,0,0,.55),
-        0 0 0 1px rgba(39,181,255,.25),
-        inset 0 1px 0 rgba(255,255,255,.05);
+        0 30px 90px rgba(0,0,0,.60),
+        inset 0 1px 0 rgba(255,255,255,.06);
       animation: modalIn .5s cubic-bezier(.68,-.55,.265,1.55);
     }
-
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(.85) translateY(40px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+    @keyframes modalIn{
+      from{ opacity:0; transform: scale(.85) translateY(40px); }
+      to{ opacity:1; transform: scale(1) translateY(0); }
     }
 
-    .close {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      color: var(--gold);
-      font-size: 35px;
+    .close{
+      position:absolute;
+      right: 18px;
+      top: 18px;
+      color: rgba(241,210,122,.98);
+      font-size: 34px;
       font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: rgba(39,181,255,.2);
-      border: 2px solid rgba(39,181,255,.4);
+      cursor:pointer;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+      width: 42px;
+      height: 42px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 999px;
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(212,175,55,.35);
     }
-
-    .close:hover {
-      background: rgba(39,181,255,.3);
+    .close:hover{
       transform: rotate(90deg);
-      box-shadow: 0 0 20px rgba(39,181,255,.5);
+      box-shadow: 0 0 28px rgba(212,175,55,.20);
+      background: rgba(212,175,55,.12);
     }
 
-    .trophy-icon {
-      font-size: 80px;
-      margin-bottom: 20px;
+    .trophy-icon{
+      font-size: 78px;
+      margin-bottom: 18px;
       animation: bounce 1s ease infinite;
+      filter: drop-shadow(0 12px 22px rgba(0,0,0,.4));
     }
+    @keyframes bounce{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .modal-title {
+    .modal-title{
       font-family: var(--ff-display);
-      font-weight: 700;
+      font-weight: 800;
       font-size: clamp(1.7rem, 5vw, 2.4rem);
-      background: linear-gradient(135deg, var(--white), var(--blue-soft));
+      background: linear-gradient(135deg, var(--marble), rgba(241,210,122,.98));
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
-    .prize-display {
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    .prize-display{
+      background: linear-gradient(135deg, rgba(212,175,55,.95), rgba(184,144,47,.90));
       border-radius: 14px;
       padding: clamp(22px, 5vw, 34px);
       margin: 18px 0;
-      box-shadow:
-        0 10px 40px rgba(212,175,55,.35),
-        inset 0 1px 0 rgba(255,255,255,.1);
+      box-shadow: 0 14px 46px rgba(212,175,55,.22), inset 0 1px 0 rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
     }
-
-    .prize-text {
+    .prize-text{
       font-family: var(--ff-ui);
-      letter-spacing: .4px;
-      font-size: clamp(1.5rem, 4.5vw, 2rem);
-      font-weight: 600;
-      color: var(--white);
+      letter-spacing: .6px;
+      font-size: clamp(1.55rem, 4.5vw, 2.05rem);
+      font-weight: 700;
+      color: rgba(10,15,20,.95);
+      text-transform: uppercase;
     }
-
-    .prize-description {
+    .prize-description{
       font-size: .95rem;
-      color: rgba(234,246,255,.9);
+      color: rgba(233,238,246,.90);
       margin-top: 10px;
     }
 
-    .modal-button {
-      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
-      color: var(--white);
-      border: none;
+    .modal-button{
+      background: linear-gradient(135deg, rgba(233,238,246,.14), rgba(0,0,0,.20));
+      color: rgba(233,238,246,.95);
+      border: 1px solid rgba(159,211,255,.22);
       padding: 14px 40px;
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 800;
       border-radius: 999px;
-      cursor: pointer;
+      cursor:pointer;
       margin-top: 18px;
-      transition: transform .2s ease, box-shadow .2s ease;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
       letter-spacing: .2px;
-      box-shadow: 0 10px 30px rgba(39,181,255,.35);
+      box-shadow: 0 16px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
       font-family: var(--ff-body);
     }
-
-    .modal-button:hover {
+    .modal-button:hover{
       transform: translateY(-2px);
-      box-shadow: 0 14px 38px rgba(39,181,255,.45);
+      box-shadow: 0 20px 50px rgba(0,0,0,.52);
+      background: linear-gradient(135deg, rgba(212,175,55,.14), rgba(0,0,0,.20));
     }
+    .modal-button:active{ transform: translateY(0); }
 
-    .modal-button:active {
-      transform: translateY(0);
-    }
-
-    /* Success Message */
-    .success-message {
-      display: none;
+    /* =========================
+       SUCCESS MESSAGE
+       ========================= */
+    .success-message{
+      display:none;
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--ink) 100%);
-      padding: 40px 60px;
-      border: 3px solid var(--blue);
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 0 50px rgba(39,181,255,.8);
+      background:
+        radial-gradient(900px 300px at 50% -20%, rgba(212,175,55,.18), transparent 60%),
+        linear-gradient(135deg, rgba(233,238,246,.10) 0%, rgba(0,0,0,.25) 100%);
+      padding: 36px 54px;
+      border: 1.5px solid rgba(212,175,55,.45);
+      border-radius: 22px;
+      text-align:center;
+      box-shadow: 0 0 70px rgba(212,175,55,.20), 0 30px 90px rgba(0,0,0,.60);
       z-index: 10000;
-      animation: successPulse 0.5s ease-out;
+      animation: successPulse .5s ease-out;
     }
-
-    @keyframes successPulse {
-      0% {
-        transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0;
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-      }
+    @keyframes successPulse{
+      0%{ transform: translate(-50%, -50%) scale(.88); opacity:0; }
+      100%{ transform: translate(-50%, -50%) scale(1); opacity:1; }
     }
-
-    .success-message h2 {
-      color: var(--gold);
-      font-size: 2.2rem;
-      margin-bottom: 15px;
-      text-shadow: 0 0 20px rgba(212,175,55,.6);
-      font-weight: 800;
+    .success-message h2{
+      color: rgba(241,210,122,.98);
+      font-size: 2.05rem;
+      margin-bottom: 12px;
+      text-shadow: 0 0 22px rgba(212,175,55,.20);
+      font-weight: 900;
       font-family: var(--ff-display);
     }
-
-    .success-message p {
-      color: var(--cream);
-      font-size: 1.4rem;
-      margin: 10px 0;
+    .success-message p{
+      color: rgba(233,238,246,.92);
+      font-size: 1.25rem;
+      margin: 8px 0;
+    }
+    .success-highlight{
+      color: rgba(241,210,122,.98);
+      font-size: 1.9rem;
+      font-weight: 900;
+      text-shadow: 0 0 28px rgba(212,175,55,.25);
+      letter-spacing: .5px;
     }
 
-    .success-highlight {
-      color: var(--gold);
-      font-size: 2rem;
-      font-weight: 800;
-      text-shadow: 0 0 20px rgba(212,175,55,.8);
-    }
-
-    /* Confetti */
-    #confetti {
+    /* =========================
+       CONFETTI
+       ========================= */
+    #confetti{
       position: fixed;
       inset: 0;
       overflow: hidden;
-      pointer-events: none;
+      pointer-events:none;
       z-index: 2147483647;
     }
-
-    .confetti-piece {
-      position: absolute;
-      top: -10vh;
-      left: 0;
-      width: 10px;
-      height: 10px;
-      background: var(--blue);
+    .confetti-piece{
+      position:absolute;
+      top:-10vh;
+      left:0;
+      width:10px;
+      height:10px;
       border-radius: 2px;
       will-change: top, left, transform, opacity;
       animation:
         fall var(--t, 3s) linear var(--delay, 0s) forwards,
         sway var(--tsway, 2s) ease-in-out var(--delay, 0s) infinite alternate,
         spin var(--tspin, 1.6s) linear var(--delay, 0s) infinite;
-      opacity: .95;
+      opacity:.95;
     }
-
-    @keyframes fall {
-      to { top: 110vh; opacity: 0; }
+    @keyframes fall{ to{ top:110vh; opacity:0; } }
+    @keyframes sway{
+      from{ left: calc(var(--x, 50) * 1vw - var(--amp, 3vw)); }
+      to{ left: calc(var(--x, 50) * 1vw + var(--amp, 3vw)); }
     }
+    @keyframes spin{ from{ transform: rotate(0deg); } to{ transform: rotate(720deg); } }
 
-    @keyframes sway {
-      from { left: calc(var(--x, 50) * 1vw - var(--amp, 3vw)); }
-      to { left: calc(var(--x, 50) * 1vw + var(--amp, 3vw)); }
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(720deg); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      #logo, .header-section, .game-wrapper, .trophy-icon, .modal-content {
+    @media (prefers-reduced-motion: reduce){
+      #logo, .header-section, .game-wrapper, .trophy-icon, .modal-content, body::before, .torch{
         animation: none !important;
         transition: none !important;
       }
     }
 
-    @media (max-width: 768px) {
-      .header-section {
-        margin-bottom: 30px;
-      }
-
-      .mobile-controls {
-        display: grid;
-      }
-
-      .keys {
-        display: none;
-      }
-
-      .instructions {
-        padding: 15px;
-      }
-
-      .modal-content {
-        padding: 30px 20px;
-        margin: 18px;
-      }
-
-      .success-message {
-        padding: 30px 40px;
-        width: 90%;
-      }
-
-      .success-message h2 {
-        font-size: 1.8rem;
-      }
-
-      .success-message p {
-        font-size: 1.2rem;
-      }
-
-      .success-highlight {
-        font-size: 1.6rem;
-      }
+    @media (max-width: 768px){
+      .header-section{ margin-bottom: 28px; }
+      .mobile-controls{ display:grid; }
+      .keys{ display:none; }
+      .instructions{ padding: 15px; }
+      .modal-content{ padding: 30px 20px; margin: 18px; }
+      .success-message{ padding: 30px 38px; width: 90%; }
+      .success-message h2{ font-size: 1.75rem; }
+      .success-message p{ font-size: 1.1rem; }
+      .success-highlight{ font-size: 1.55rem; }
     }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 14px;
-      }
-
-      .canvas-container {
-        border-radius: 20px;
-        padding: 15px;
-      }
-
-      .modal-content {
-        border-radius: 18px;
-        padding: 26px 18px;
-      }
+    @media (max-width: 480px){
+      .container{ padding: 14px; }
+      .canvas-container{ border-radius: 22px; padding: 14px; }
+      #mazeCanvas{ border-radius: 12px; }
+      .modal-content{ border-radius: 18px; padding: 26px 18px; }
     }
   </style>
 </head>
+
 <body>
   <!-- Preloader -->
   <div id="preloader" aria-hidden="true">
@@ -621,28 +618,32 @@
   <!-- Main -->
   <div class="container">
     <div class="header-section" role="banner">
-      <div class="event-badge">Premio Exclusivo</div>
+      <div class="event-badge">EL TEMPLO DE MÁRMOL</div>
       <h1>Laberinto del Tesoro</h1>
-      <p class="subtitle">Encuentra tu camino hacia el premio del 150%. Solo tienes una oportunidad.</p>
+      <p class="subtitle">Encuentra el trofeo sagrado y reclamá tu <b>BONO DEL 200%</b>. Solo 1 intento por día.</p>
     </div>
 
     <div class="game-wrapper">
       <div class="canvas-container">
+        <div class="torch t1"></div>
+        <div class="torch t2"></div>
+        <div class="torch t3"></div>
+        <div class="torch t4"></div>
         <canvas id="mazeCanvas" width="450" height="450"></canvas>
       </div>
 
       <div class="mobile-controls">
-        <button class="control-btn up" id="btnUp">↑</button>
-        <button class="control-btn left" id="btnLeft">←</button>
-        <button class="control-btn down" id="btnDown">↓</button>
-        <button class="control-btn right" id="btnRight">→</button>
+        <button class="control-btn up" id="btnUp" aria-label="Arriba">↑</button>
+        <button class="control-btn left" id="btnLeft" aria-label="Izquierda">←</button>
+        <button class="control-btn down" id="btnDown" aria-label="Abajo">↓</button>
+        <button class="control-btn right" id="btnRight" aria-label="Derecha">→</button>
       </div>
 
       <div class="instructions">
         <h3>¿Cómo jugar?</h3>
-        <p>Usa las flechas del teclado o los botones para moverte</p>
-        <p>Encuentra el trofeo dorado para reclamar tu bono del 150%</p>
-        <p><strong>¡Solo tienes una oportunidad! El juego termina cuando reclames el premio.</strong></p>
+        <p>Usá las flechas del teclado o los botones para moverte por el templo.</p>
+        <p>Encontrá el trofeo para reclamar tu <b>bono del 200%</b>.</p>
+        <p><strong>Solo 1 oportunidad por día.</strong> Mañana podés volver a jugar.</p>
         <div class="keys">
           <div class="key">↑ W</div>
           <div class="key">← A</div>
@@ -656,13 +657,13 @@
   <!-- Modal -->
   <div class="result-modal" id="resultModal" aria-modal="true" role="dialog">
     <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
+      <span class="close" id="closeModal" aria-label="Cerrar">&times;</span>
       <div class="trophy-icon">🏆</div>
       <h2 class="modal-title">¡Felicitaciones!</h2>
       <div class="prize-display">
-        <div class="prize-text">BONO DEL 150%</div>
+        <div class="prize-text">BONO DEL 200%</div>
       </div>
-      <p class="prize-description">Tu premio ha sido acreditado. ¡A disfrutarlo en BetArgento!</p>
+      <p class="prize-description">Has reclamado el premio del templo. ¡A disfrutarlo en BetArgento!</p>
       <button class="modal-button" id="claimBtn">Aceptar</button>
     </div>
   </div>
@@ -671,21 +672,33 @@
   <div class="success-message" id="successMessage">
     <h2>¡Felicitaciones!</h2>
     <p>Conseguiste el</p>
-    <p class="success-highlight">150%</p>
+    <p class="success-highlight">200%</p>
+    <p style="margin-top:10px; font-size:.95rem; opacity:.85;">Volvé mañana para jugar de nuevo.</p>
   </div>
 
   <!-- Confetti Layer -->
   <div id="confetti"></div>
 
   <script>
-    /* BetArgento storage key */
-    const STORAGE_KEY = 'laberintoBetArgentoLastPlay';
-  
-    // 🔹 helper: devuelve la fecha "YYYY-MM-DD"
+    /**
+     * ✅ Cambios pedidos:
+     * - Premio 150% -> 200% (texto + mensajes)
+     * - LocalStorage propio y bloqueo por día (juega de nuevo al día siguiente)
+     * - Estilo "EL TEMPLO DE MÁRMOL"
+     */
+
+    // LocalStorage key propio (NO reutiliza el anterior)
+    const STORAGE_KEY = 'temploDeMarMol_laberinto_lastPlay_v1';
+
+    // helper: fecha YYYY-MM-DD (local)
     function getTodayKey() {
-      return new Date().toISOString().slice(0, 10);
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
     }
-  
+
     /* Preloader */
     window.addEventListener('load', function() {
       let p = 0;
@@ -700,24 +713,27 @@
         document.getElementById('progressText').textContent = Math.floor(p) + '%';
       }, 100);
     });
-  
+
     const canvas = document.getElementById('mazeCanvas');
     const ctx = canvas.getContext('2d');
-  
+
     const CELL_SIZE = 30;
     const MAZE_SIZE = 15;
-  
-    // 🎨 Colores BetArgento
-    const WALL_COLOR   = '#0C2233';
-    const WALL_BORDER  = '#27B5FF';
-    const PATH_COLOR   = '#081621';
-    const PLAYER_COLOR = '#D4AF37';
-    const PRIZE_COLOR  = '#D4AF37';
-  
+
+    // ====== Colores (Templo de Mármol) ======
+    const WALL_COLOR   = '#101826';   // piedra oscura
+    const WALL_BORDER  = 'rgba(212,175,55,.35)'; // filo dorado
+    const PATH_COLOR   = '#0b0f16';   // suelo templo
+    const PATH_GLOW    = 'rgba(159,211,255,.08)';
+    const PLAYER_COLOR = '#d4af37';   // oro
+    const PRIZE_GLOW   = 'rgba(241,210,122,.95)';
+
+    // Estado
     let player = { x: 1, y: 1 };
     let prize  = { x: 13, y: 8 };
     let gameWon = false;
-  
+
+    // Laberinto (1 pared, 0 camino)
     const maze = [
       [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
       [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
@@ -735,99 +751,197 @@
       [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
       [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ];
-  
+
+    // --- Render helpers ---
+    function drawBackground() {
+      // suelo con "mármol" sutil
+      const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      g.addColorStop(0, '#0a0f18');
+      g.addColorStop(0.55, '#0b101a');
+      g.addColorStop(1, '#070a10');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // vetas de mármol muy suaves
+      ctx.save();
+      ctx.globalAlpha = 0.10;
+      ctx.strokeStyle = 'rgba(233,238,246,.25)';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 8; i++) {
+        ctx.beginPath();
+        const y = (i / 8) * canvas.height;
+        ctx.moveTo(0, y + Math.random()*8);
+        ctx.bezierCurveTo(
+          canvas.width*0.3, y + 20 + Math.random()*20,
+          canvas.width*0.6, y - 20 + Math.random()*20,
+          canvas.width, y + Math.random()*8
+        );
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // glow central
+      ctx.save();
+      ctx.globalAlpha = 0.35;
+      const rg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, canvas.width*0.6);
+      rg.addColorStop(0, PATH_GLOW);
+      rg.addColorStop(1, 'transparent');
+      ctx.fillStyle = rg;
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.restore();
+    }
+
     function drawMaze() {
       for (let y = 0; y < MAZE_SIZE; y++) {
         for (let x = 0; x < MAZE_SIZE; x++) {
+          const px = x * CELL_SIZE;
+          const py = y * CELL_SIZE;
+
           if (maze[y][x] === 1) {
-            ctx.fillStyle = WALL_COLOR;
-            ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            // pared piedra
+            const wg = ctx.createLinearGradient(px, py, px + CELL_SIZE, py + CELL_SIZE);
+            wg.addColorStop(0, '#0f1724');
+            wg.addColorStop(1, '#0a0f18');
+            ctx.fillStyle = wg;
+            ctx.fillRect(px, py, CELL_SIZE, CELL_SIZE);
+
+            // borde dorado
             ctx.strokeStyle = WALL_BORDER;
             ctx.lineWidth = 1;
-            ctx.strokeRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            ctx.strokeRect(px + 0.5, py + 0.5, CELL_SIZE - 1, CELL_SIZE - 1);
+
+            // marcas tipo "losa"
+            ctx.save();
+            ctx.globalAlpha = 0.18;
+            ctx.strokeStyle = 'rgba(233,238,246,.18)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(px + 6, py + 10);
+            ctx.lineTo(px + CELL_SIZE - 10, py + 6);
+            ctx.stroke();
+            ctx.restore();
           } else {
+            // camino
             ctx.fillStyle = PATH_COLOR;
-            ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            ctx.fillRect(px, py, CELL_SIZE, CELL_SIZE);
           }
         }
       }
     }
-  
+
     function drawPlayer() {
-      ctx.fillStyle = PLAYER_COLOR;
-      ctx.shadowColor = 'rgba(212,175,55,0.8)'; // glow dorado
-      ctx.shadowBlur = 15;
+      ctx.save();
+      ctx.shadowColor = 'rgba(212,175,55,0.85)';
+      ctx.shadowBlur = 16;
+
+      // orbe dorado
+      const cx = player.x * CELL_SIZE + CELL_SIZE / 2;
+      const cy = player.y * CELL_SIZE + CELL_SIZE / 2;
+      const rg = ctx.createRadialGradient(cx-4, cy-6, 2, cx, cy, CELL_SIZE/2.2);
+      rg.addColorStop(0, 'rgba(255,255,255,.55)');
+      rg.addColorStop(0.3, 'rgba(241,210,122,.95)');
+      rg.addColorStop(1, 'rgba(212,175,55,.85)');
+      ctx.fillStyle = rg;
+
       ctx.beginPath();
-      ctx.arc(
-        player.x * CELL_SIZE + CELL_SIZE / 2,
-        player.y * CELL_SIZE + CELL_SIZE / 2,
-        CELL_SIZE / 3,
-        0,
-        Math.PI * 2
-      );
+      ctx.arc(cx, cy, CELL_SIZE/3.05, 0, Math.PI*2);
       ctx.fill();
+
+      // mini brillo
       ctx.shadowBlur = 0;
+      ctx.globalAlpha = 0.6;
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.beginPath();
+      ctx.arc(cx - 6, cy - 6, 3, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.restore();
     }
-  
+
     function drawPrize() {
       const centerX = prize.x * CELL_SIZE + CELL_SIZE / 2;
       const centerY = prize.y * CELL_SIZE + CELL_SIZE / 2;
-      
+
       ctx.save();
-      ctx.shadowColor = 'rgba(212,175,55,0.9)';
-      ctx.shadowBlur = 20;
-      ctx.fillStyle = PRIZE_COLOR;
+      // aura
+      ctx.globalAlpha = 0.85;
+      const glow = ctx.createRadialGradient(centerX, centerY, 2, centerX, centerY, 26);
+      glow.addColorStop(0, 'rgba(241,210,122,.65)');
+      glow.addColorStop(0.5, 'rgba(212,175,55,.25)');
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 26, 0, Math.PI*2);
+      ctx.fill();
+
+      // trofeo
+      ctx.shadowColor = PRIZE_GLOW;
+      ctx.shadowBlur = 22;
       ctx.font = 'bold 20px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#d4af37';
       ctx.fillText('🏆', centerX, centerY);
+
       ctx.restore();
     }
-  
+
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBackground();
       drawMaze();
       drawPrize();
       drawPlayer();
     }
-  
-    // 🔹 guarda fecha de hoy
+
+    // ====== Daily play lock ======
     function markAsPlayed() {
       const today = getTodayKey();
       localStorage.setItem(STORAGE_KEY, today);
       gameWon = true;
     }
-  
+
+    function alreadyPlayedToday() {
+      const lastPlay = localStorage.getItem(STORAGE_KEY);
+      return lastPlay === getTodayKey();
+    }
+
+    // ====== Gameplay ======
     function movePlayer(dx, dy) {
       if (gameWon) return;
-  
+
       const newX = player.x + dx;
       const newY = player.y + dy;
-  
-      if (newX >= 0 && newX < MAZE_SIZE && newY >= 0 && newY < MAZE_SIZE && maze[newY][newX] === 0) {
+
+      if (
+        newX >= 0 && newX < MAZE_SIZE &&
+        newY >= 0 && newY < MAZE_SIZE &&
+        maze[newY][newX] === 0
+      ) {
         player.x = newX;
         player.y = newY;
-  
+
         if (player.x === prize.x && player.y === prize.y) {
           markAsPlayed();
           showWinModal();
         }
-  
+
         draw();
       }
     }
-  
+
     function showWinModal() {
       lanzarConfetti();
       document.getElementById('resultModal').classList.add('show');
     }
-  
+
     function lanzarConfetti() {
       const confettiLayer = document.getElementById('confetti');
       confettiLayer.innerHTML = '';
-      const colors = ['#27B5FF', '#7CD6FF', '#89E0FF', '#D4AF37', '#FFFFFF'];
+      // marble+gold confetti
+      const colors = ['#D4AF37', '#F1D27A', '#E9EEF6', '#9FD3FF', '#B8902F'];
       const total = 120;
-      
+
       for (let i = 0; i < total; i++) {
         const c = document.createElement('div');
         c.className = 'confetti-piece';
@@ -838,97 +952,81 @@
         const tsway = (Math.random() * 1.5 + 1.6) + 's';
         const tspin = (Math.random() * 1.2 + 1) + 's';
         const delay = (Math.random() * 0.7) + 's';
-  
+
         c.style.setProperty('--x', x);
         c.style.setProperty('--amp', amp);
         c.style.setProperty('--t', t);
         c.style.setProperty('--tsway', tsway);
         c.style.setProperty('--tspin', tspin);
         c.style.setProperty('--delay', delay);
-  
+
         c.style.width = size + 'px';
         c.style.height = size + 'px';
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
-  
+        if (Math.random() > 0.55) c.style.borderRadius = '999px';
+
         confettiLayer.appendChild(c);
         setTimeout(() => c.remove(), 6000);
       }
     }
-  
-    // Controles teclado
+
+    // ====== Input ======
     document.addEventListener('keydown', (e) => {
-      switch(e.key) {
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-          movePlayer(0, -1);
-          break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-          movePlayer(0, 1);
-          break;
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          movePlayer(-1, 0);
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          movePlayer(1, 0);
-          break;
-      }
+      const k = e.key;
+      if (k === 'ArrowUp' || k === 'w' || k === 'W') movePlayer(0, -1);
+      else if (k === 'ArrowDown' || k === 's' || k === 'S') movePlayer(0, 1);
+      else if (k === 'ArrowLeft' || k === 'a' || k === 'A') movePlayer(-1, 0);
+      else if (k === 'ArrowRight' || k === 'd' || k === 'D') movePlayer(1, 0);
     });
-  
-    // Controles táctiles
+
     document.getElementById('btnUp').addEventListener('click', () => movePlayer(0, -1));
     document.getElementById('btnDown').addEventListener('click', () => movePlayer(0, 1));
     document.getElementById('btnLeft').addEventListener('click', () => movePlayer(-1, 0));
     document.getElementById('btnRight').addEventListener('click', () => movePlayer(1, 0));
-  
-    document.getElementById('closeModal').addEventListener('click', () => {
-      document.getElementById('resultModal').classList.remove('show');
-      showSuccessMessage();
-    });
-  
-    document.getElementById('claimBtn').addEventListener('click', () => {
-      document.getElementById('resultModal').classList.remove('show');
-      showSuccessMessage();
-    });
-  
+
+    // ====== Modal close / claim ======
+    const modal = document.getElementById('resultModal');
+    const successMsg = document.getElementById('successMessage');
+
     function showSuccessMessage() {
+      // Asegura que quede marcado como jugado
       markAsPlayed();
-      const successMsg = document.getElementById('successMessage');
       successMsg.style.display = 'block';
     }
-  
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      modal.classList.remove('show');
+      showSuccessMessage();
+    });
+
+    document.getElementById('claimBtn').addEventListener('click', () => {
+      modal.classList.remove('show');
+      showSuccessMessage();
+    });
+
     window.addEventListener('click', (e) => {
-      const modal = document.getElementById('resultModal');
       if (e.target === modal) {
         modal.classList.remove('show');
         showSuccessMessage();
       }
     });
-  
+
+    // ====== Init ======
     function initGame() {
-      const lastPlay = localStorage.getItem(STORAGE_KEY);
-      const today = getTodayKey();
-      const alreadyPlayedToday = lastPlay === today;
-  
-      if (alreadyPlayedToday) {
+      if (alreadyPlayedToday()) {
         gameWon = true;
+        // Coloca el jugador en el premio solo para mostrar estado "ya jugado"
         player.x = prize.x;
         player.y = prize.y;
         draw();
-        setTimeout(showSuccessMessage, 200);
+        setTimeout(() => showSuccessMessage(), 250);
       } else {
         gameWon = false;
         player = { x: 1, y: 1 };
         draw();
       }
     }
-  
+
     initGame();
   </script>
 </body>
